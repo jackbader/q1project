@@ -21,6 +21,10 @@ $( document ).ready(function() {
     }).done((response) => {
       console.log("data from ritekit is...", response)
 
+      $('h2 .remove').remove()
+      $('thead').children().remove()
+      $('tbody').children().remove()
+
       let data = response['tags']
       console.log(data)
       console.log(data.length)

@@ -9,8 +9,8 @@ $( document ).ready(function() {
   }
 
 
-  function getResults(searchTerm) {
-    let url = "https://g-ritekit.herokuapp.com/v1/stats/hashtag-suggestions/" + searchTerm
+  function getResults(input) {
+    let url = "https://g-ritekit.herokuapp.com/v1/stats/hashtag-suggestions/" + input
     $.ajax({
       url: url,
       method: 'GET',
@@ -20,6 +20,26 @@ $( document ).ready(function() {
 
     }).done((response) => {
       console.log("data from ritekit is...", response)
+
+      console.log('input' + input)
+
+      $('.remove').remove()
+      $('thead').children().remove()
+      $('tbody').children().remove()
+
+      let ulcontainer = $('.ulcontainer')
+      let newul = $('<ul>')
+      newul.addClass('list-group')
+      newul.addClass('list-title')
+      newul.addClass('list-group-stats')
+
+      let title = $('<li>')
+      title.addClass('list-group-item')
+      title.addClass('active')
+      title.text('#' + input + ' Hashtag Statistics (Per Hour)')
+      newul.append(title)
+
+      ulcontainer.append(newul)
 
       let data = response['data']
       console.log(data)
@@ -156,20 +176,6 @@ $( document ).ready(function() {
     $(".spanSearches").text(searches)
 
     $('.ulcontainer').children().remove()
-
-    let ulcontainer = $('.ulcontainer')
-    let newul = $('<ul>')
-    newul.addClass('list-group')
-    newul.addClass('list-title')
-    newul.addClass('list-group-stats')
-
-    let title = $('<li>')
-    title.addClass('list-group-item')
-    title.addClass('active')
-    title.text('#' + input + ' Hashtag Statistics (Per Hour)')
-    newul.append(title)
-
-    ulcontainer.append(newul)
 
     getResults(input)
   })

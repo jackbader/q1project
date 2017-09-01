@@ -1,6 +1,5 @@
 $( document ).ready(function() {
 
-
   if (localStorage.getItem("searches") !== null) {
     let string = localStorage.getItem("searches")
     let obj = JSON.parse(string)
@@ -9,17 +8,32 @@ $( document ).ready(function() {
   }
 
 
-  function getResults(searchTerm) {
-    let url = "https://g-ritekit.herokuapp.com/v1/stats/hashtag-suggestions/" + searchTerm
+  function getResults(input) {
+    let url = "https://g-ritekit.herokuapp.com/v1/stats/hashtag-suggestions/" + input
     $.ajax({
       url: url,
       method: 'GET',
       dataType: 'JSON',
       headers: {},
       data: `client_id=407d99c5b4e5a2294318ab2b18d89ab0fdc30c486f71`,
-
     }).done((response) => {
       console.log("data from ritekit is...", response)
+
+      $('.ulcontainer').children().remove()
+
+      let ulcontainer = $('.ulcontainer')
+      let newul = $('<ul>')
+      newul.addClass('list-group')
+      newul.addClass('list-title')
+      newul.addClass('list-group-stats')
+
+      let title = $('<li>')
+      title.addClass('list-group-item')
+      title.addClass('active')
+      title.text('#' + input + ' Hashtag Statistics (Per Hour)')
+      newul.append(title)
+
+      ulcontainer.append(newul)
 
       let keys = Object.keys(response)
       console.log("keys: " + keys)
@@ -65,7 +79,6 @@ $( document ).ready(function() {
       return;
     }
 
-
     let input = $('.form-control').val()
     let arr = input.split(" ")
     input = arr[0]
@@ -100,20 +113,6 @@ $( document ).ready(function() {
     $(".spanSearches").text(searches)
 
     $('.ulcontainer').children().remove()
-
-    let ulcontainer = $('.ulcontainer')
-    let newul = $('<ul>')
-    newul.addClass('list-group')
-    newul.addClass('list-title')
-    newul.addClass('list-group-stats')
-
-    let title = $('<li>')
-    title.addClass('list-group-item')
-    title.addClass('active')
-    title.text('#' + input + ' Hashtag Statistics (Per Hour)')
-    newul.append(title)
-
-    ulcontainer.append(newul)
 
     getResults(input)
   })
